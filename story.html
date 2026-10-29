@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What the house saw</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>What the house saw</h1>
+  <p class="sub" id="src"></p>
+
+  <div class="story" id="story"></div>
+
+  <div class="row">
+    <button id="again">Haunt it again</button>
+    <a class="btn" href="index.html">Use a different log</a>
+  </div>
+
+  <div class="card" style="margin-top:36px">
+    <h2>The evidence</h2>
+    <ul class="tl" id="tl"></ul>
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  let job;
+  try { job = JSON.parse(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
+  job = job || { log: SAMPLE_LOG, temp: 1.3, mode: "offline" }; // opened directly: show the example night
+  const evs = parseLog(job.log);
+
+  evs.forEach(e => {
+    const li = document.createElement("li");
+    [[e.t.slice(0, 8), "t"], [`${e.d}: ${e.e}${e.n ? " (" + e.n + ")" : ""}`, ""], ["●".repeat(haunt(e)), "lv"]].forEach(([s, c]) => {
+      const sp = document.createElement("span"); sp.textContent = s; sp.className = c; li.appendChild(sp);
+    });
+    $("tl").appendChild(li);
+  });
+
+  async function run() {
+    $("story").innerHTML = "";
+    $("src").textContent = "The house is listening...";
+    const { text, src } = await makeStory(evs, job.temp, job.mode);
+    $("src").textContent = src;
+    text.split(/\n+/).filter(Boolean).forEach((s, i) => {
+      const p = document.createElement("p");
+      p.textContent = s;
+      p.style.animationDelay = i * 1.3 + "s";
+      $("story").appendChild(p);
+    });
+  }
+  $("again").onclick = run;
+  run();
+</script>
+</body>
+</html>

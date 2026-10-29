@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>While you slept</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>While you slept</h1>
+  <p class="sub">Paste last night's smart home log. The house will tell you who else was awake.</p>
+
+  <div class="card">
+    <label for="log">Sensor log (time | device | event | note, one per line)</label>
+    <textarea id="log" spellcheck="false"></textarea>
+    <div class="row">
+      <button id="sample">Load example log</button>
+      <button id="ha">Pull from Home Assistant</button>
+    </div>
+    <p class="note" id="msg"></p>
+  </div>
+
+  <div class="card">
+    <label for="mode">Storyteller</label>
+    <select id="mode">
+      <option value="offline">Offline haunt engine (works instantly)</option>
+      <option value="llm">LLM (set LLM_URL and LLM_MODEL in app.js)</option>
+    </select>
+    <label for="temp">Creativity (temperature): <b id="tv">1.3</b></label>
+    <input type="range" id="temp" min="0" max="2" step="0.1" value="1.3">
+  </div>
+
+  <button class="go" id="go">Tell me the story</button>
+</main>
+
+<script src="app.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  $("log").value = SAMPLE_LOG;
+  $("sample").onclick = () => { $("log").value = SAMPLE_LOG; $("msg").textContent = "Example log loaded."; };
+  $("temp").oninput = e => $("tv").textContent = e.target.value;
+  $("ha").onclick = async () => {
+    $("msg").textContent = "Reading the house...";
+    try { $("log").value = await pullHomeAssistant(); $("msg").textContent = "Log pulled from Home Assistant."; }
+    catch (e) { $("msg").textContent = "Could not pull the log: " + e.message + ". Check CONFIG in app.js and your Home Assistant CORS setting."; }
+  };
+  $("go").onclick = () => {
+    const job = { log: $("log").value, temp: +$("temp").value, mode: $("mode").value };
+    if (!parseLog(job.log).length) { $("msg").textContent = "The log is empty. Paste some lines or load the example."; return; }
+    // The log travels in the URL hash, so no server or storage is needed
+    location.href = "story.html#" + encodeURIComponent(JSON.stringify(job));
+  };
+</script>
+</body>
+</html>

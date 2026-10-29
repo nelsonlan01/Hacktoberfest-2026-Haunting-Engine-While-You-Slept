@@ -1,0 +1,27 @@
+:root{--bg:#101516;--card:#161d1f;--line:#26302f;--fg:#e6dfcf;--dim:#8a9591;--amber:#d9a441;--red:#b0483e}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(120% 80% at 50% 0,#1a2423,var(--bg) 70%) fixed;color:var(--fg);font:17px/1.75 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+main{max-width:760px;margin:0 auto;padding:48px 20px 90px}
+h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:400;font-style:italic;margin:0 0 6px}
+h2{font-size:1rem;font-weight:400;color:var(--dim);margin:0 0 8px}
+.sub,.note{color:var(--dim);margin:0 0 26px}
+.note{font-size:14px;margin:10px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px;margin:16px 0}
+textarea,select{width:100%;background:#0b1011;color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:10px;font:inherit;font-size:15px}
+textarea{height:300px;resize:vertical;color:#d8c58f;font:13px/1.6 ui-monospace,Consolas,monospace}
+label{display:block;color:var(--dim);font-size:15px;margin:12px 0 4px}
+input[type=range]{width:100%;accent-color:var(--amber)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+button,.btn{background:transparent;color:var(--amber);border:1px solid var(--amber);padding:9px 16px;border-radius:6px;cursor:pointer;font:inherit;font-size:15px;text-decoration:none}
+button:hover,.btn:hover{background:#d9a44122}
+.go{background:var(--amber);color:#1a1405}
+.go:hover{background:#ebb853}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.story p{max-width:62ch;font-size:1.2rem;opacity:0;animation:surface 2.2s forwards}
+@keyframes surface{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:none}}
+.tl{list-style:none;padding:0;margin:0;font:13px/1.5 ui-monospace,Consolas,monospace}
+.tl li{display:grid;grid-template-columns:68px 1fr 36px;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+.tl li:last-child{border:0}
+.tl .t{color:var(--dim)}
+.tl .lv{color:var(--amber);text-align:right;letter-spacing:1px}
+@media (prefers-reduced-motion:reduce){.story p{animation:none;opacity:1}}
